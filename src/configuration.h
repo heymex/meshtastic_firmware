@@ -453,6 +453,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MESHTASTIC_EXCLUDE_ADMIN 1
 #endif
 
+// Development mode: Bypass rate limits for testing/development
+// WARNING: Only enable this in small-scale private test environments!
+// Enabling this will bypass rate limits for:
+// - Traceroute (30s -> no limit)
+// - Position/Waypoint/Alert/Telemetry (10s -> no limit)
+// - Text messages (2s -> no limit)
+// - NodeInfo minimum send time (5min -> no limit)
+// - TraceRoute cooldown (30s -> no limit)
+// To enable, uncomment the line below or define it in your build environment:
+// #define MESHTASTIC_DEVELOPMENT_MODE 1
+
 // // Turn off wifi even if HW supports wifi (webserver relies on wifi and is also disabled)
 #ifdef MESHTASTIC_EXCLUDE_WIFI
 #define MESHTASTIC_EXCLUDE_WEBSERVER 1

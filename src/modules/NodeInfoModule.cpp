@@ -95,6 +95,7 @@ meshtastic_MeshPacket *NodeInfoModule::allocReply()
         return NULL;
     }
     // If we sent our NodeInfo less than 5 min. ago, don't send it again as it may be still underway.
+#ifndef MESHTASTIC_DEVELOPMENT_MODE
     if (!shorterTimeout && lastSentToMesh && Throttle::isWithinTimespanMs(lastSentToMesh, 5 * 60 * 1000)) {
         LOG_DEBUG("Skip send NodeInfo since we sent it <5min ago");
         ignoreRequest = true; // Mark it as ignored for MeshModule
@@ -104,6 +105,10 @@ meshtastic_MeshPacket *NodeInfoModule::allocReply()
         ignoreRequest = true; // Mark it as ignored for MeshModule
         return NULL;
     } else {
+#else
+    // Development mode: Minimum send time bypassed
+    {
+#endif
         ignoreRequest = false; // Don't ignore requests anymore
         meshtastic_User &u = owner;
 

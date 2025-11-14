@@ -442,6 +442,7 @@ bool TraceRouteModule::startTraceRoute(NodeNum node)
         return false;
     }
 
+#ifndef MESHTASTIC_DEVELOPMENT_MODE
     if (initialized && lastTraceRouteTime > 0 && now - lastTraceRouteTime < cooldownMs) {
         // Cooldown
         unsigned long wait = (cooldownMs - (now - lastTraceRouteTime)) / 1000;
@@ -455,6 +456,9 @@ bool TraceRouteModule::startTraceRoute(NodeNum node)
         LOG_INFO("Cooldown active, please wait %lu seconds before starting a new trace route.", wait);
         return false;
     }
+#else
+    // Development mode: Cooldown bypassed
+#endif
 
     tracingNode = node;
     lastTraceRouteTime = now;
@@ -564,6 +568,7 @@ void TraceRouteModule::launch(NodeNum node)
     }
 
     unsigned long now = millis();
+#ifndef MESHTASTIC_DEVELOPMENT_MODE
     if (initialized && lastTraceRouteTime > 0 && now - lastTraceRouteTime < cooldownMs) {
         unsigned long wait = (cooldownMs - (now - lastTraceRouteTime)) / 1000;
         bannerText = String("Wait for ") + String(wait) + String("s");
@@ -576,6 +581,9 @@ void TraceRouteModule::launch(NodeNum node)
         LOG_INFO("Cooldown active, please wait %lu seconds before starting a new trace route.", wait);
         return;
     }
+#else
+    // Development mode: Cooldown bypassed
+#endif
 
     runState = TRACEROUTE_STATE_TRACKING;
     tracingNode = node;
